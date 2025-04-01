@@ -4064,7 +4064,7 @@ def element_sample(xc, yc, positions):
 
     # Create a set for edges that are indices of the points.
     edges = []
-    for vertex in triangulation.vertices:
+    for vertex in triangulation.simplices:
         # For each edge of the triangle, sort the vertices (sorting avoids duplicated edges being added to the set)
         # and add to the edges set.
         edge = sorted([vertex[0], vertex[1]])
