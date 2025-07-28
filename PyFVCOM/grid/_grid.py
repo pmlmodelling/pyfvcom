@@ -162,16 +162,21 @@ class GridReaderNetCDF(object):
                     # all the nodes in the triangulation for the given elements and if those match the nodes we've
                     # asked for, use the elements to cull the triangulation object.
                     triangulation_nodes = np.unique(self.triangles[self._dims['nele']])
-                    if np.all(triangulation_nodes == np.sort(self._dims['node'])):
-                        new_tri = self.triangles[self._dims['nele']]
-                        # Remap nodes to a new index. Work on a copy so we don't end up replacing a value more than
-                        # once.
-                        new_index = np.arange(0, len(self._dims['node']))
-                        original_tri = new_tri.copy()
-                        for this_old, this_new in zip(self._dims['node'], new_index):
-                            new_tri[original_tri == this_old] = this_new
+                    mismatch = False
+                    if len(triangulation_nodes) == len(self._dims['node']):
+                        if np.all(triangulation_nodes == np.sort(self._dims['node'])):
+                            new_tri = self.triangles[self._dims['nele']]
+                            # Remap nodes to a new index. Work on a copy so we don't end up replacing a value more than
+                            # once.
+                            new_index = np.arange(0, len(self._dims['node']))
+                            original_tri = new_tri.copy()
+                            for this_old, this_new in zip(self._dims['node'], new_index):
+                                new_tri[original_tri == this_old] = this_new
+                        else:
+                            mismatch = True
                     else:
-                        if self._noisy:
+                        mismatch = True
+                    if mismatch and self._noisy:
                             print('Mismatch between given elements and nodes for triangulation, retaining original elements')
             else:
                 if self._noisy:
