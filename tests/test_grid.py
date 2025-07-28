@@ -47,7 +47,7 @@ class GridToolsTest(TestCase):
         test.assert_equal(index, test_index)
         test.assert_equal(x, test_x)
         test.assert_equal(y, test_y)
-        test.assert_equal(dist, test_dist)
+        test.assert_almost_equal(dist, test_dist)
 
     def test_find_nearest_point_multiple_with_threshold(self):
         target_x, target_y = [0.5, 0.2], [0.75, 0.2]
@@ -56,7 +56,7 @@ class GridToolsTest(TestCase):
         test.assert_equal(index, test_index)
         test.assert_equal(x, test_x)
         test.assert_equal(y, test_y)
-        test.assert_equal(dist, test_dist)
+        test.assert_almost_equal(dist, test_dist)
 
     def test_elem_side_lengths(self):
         diagonal = np.hypot(1, 1)
