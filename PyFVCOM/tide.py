@@ -1245,12 +1245,12 @@ class Lanczos(object):
 
     def _spectral_filtering(self, x):
         # Filtering in frequency space is multiplication, (convolution in time space).
-        Cx = scipy.fft(x.ravel())
+        Cx = scipy.fft.fft(x.ravel())
         Cx = Cx[:(self.N // 2) + 1]
         CxH = Cx * self.window.ravel()
         # Mirror CxH and append it to itself, dropping the values depending on the length of the input.
-        CxH = np.concatenate((CxH, scipy.conj(CxH[1:self.N - len(CxH) + 1][::-1])))
-        y = np.real(scipy.ifft(CxH))
+        CxH = np.concatenate((CxH, np.conj(CxH[1:self.N - len(CxH) + 1][::-1])))
+        y = np.real(scipy.fft.ifft(CxH))
 
         return y
 
@@ -1401,12 +1401,12 @@ def _spectral_window(coef, N):
 def _spectral_filtering(x, window):
     # Filtering in frequency space is multiplication, (convolution in time space).
     Nx = len(x)
-    Cx = scipy.fft(x.ravel())
+    Cx = scipy.fft.fft(x.ravel())
     Cx = Cx[:(Nx // 2) + 1]
     CxH = Cx * window.ravel()
     # Mirror CxH and append it to itself, dropping the values depending on the length of the input.
-    CxH = np.concatenate((CxH, scipy.conj(CxH[1:Nx-len(CxH)+1][::-1])))
-    y = np.real(scipy.ifft(CxH))
+    CxH = np.concatenate((CxH, np.conj(CxH[1:Nx-len(CxH)+1][::-1])))
+    y = np.real(scipy.fft.ifft(CxH))
     return y, Cx
 
 
