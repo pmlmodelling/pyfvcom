@@ -11,7 +11,7 @@ import collections
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import cartopy.io.shapereader as shpreader
-from shapely.ops import cascaded_union
+from shapely.ops import unary_union
 import matplotlib.widgets
 import mpl_toolkits.axes_grid1
 import numpy as np
@@ -713,7 +713,7 @@ class Plotter(object):
                     # Use the file provided to Plotter class.
                     print(f'Loading file {self.coastfile} and adding coastline to plot', end=' ', flush=True)
                     land = shpreader.Reader(self.coastfile)
-                    coastline = cascaded_union(list(land.geometries()))
+                    coastline = unary_union(list(land.geometries()))
                     land = coastline
                 elif self.res in ('c', 'l', 'i', 'h', 'f'):
                     # Use the GSHHS data as in Basemap (a lot slower than the cartopy data).
