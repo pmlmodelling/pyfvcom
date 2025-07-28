@@ -3,12 +3,12 @@ from unittest import TestCase
 
 import numpy as np
 import numpy.testing as test
-from .read import _prep
 
 from PyFVCOM.coordinate import utm_from_lonlat
 from PyFVCOM.current import *
 from PyFVCOM.read import FileReader
-from PyFVCOM.utilities.grid import StubFile
+
+from helpers.utils import StubFile, _prep
 
 
 class Residuals_test(TestCase):
