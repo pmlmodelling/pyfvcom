@@ -1,0 +1,23 @@
+name: pyfvcom
+dependencies:
+    - python
+    - ipython
+    - numpy>=1.15
+    - jdcal
+    - lxml
+    - matplotlib
+    - basemap
+    - cartopy
+    - netCDF4
+    - networkx
+    - pandas
+    - xlsxwriter
+    - pyproj
+    - pytz
+    - scipy
+    - pyshp
+    - UTide
+    - shapely
+    - descartes
+    - pip:
+      - -e .
