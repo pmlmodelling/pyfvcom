@@ -1121,7 +1121,10 @@ class OpenBoundary(object):
         """
 
         with Dataset(str(harmonics), 'r') as tides:
-            const = [''.join(i).upper().strip() for i in tides.variables[names['constituent_name']][:].astype(str)]
+            if len(tides.variables[names['constituent_name']][:].astype(str)[0]) > 1:
+                const = [''.join(i).upper().strip() for i in tides.variables[names['constituent_name']][:].astype(str)]
+            else:
+                const = ''.join(tides.variables[names['constituent_name']][:].astype(str)).upper().strip()
 
             # If we've been given constituents that aren't in the harmonics 
             # data, just find the indices we do have.
