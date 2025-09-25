@@ -1,0 +1,64 @@
+Bootstrap: docker
+From: condaforge/mambaforge:latest
+
+%labels
+    Author mib
+    Description "PyFVCOM container"
+
+%help
+    This container includes a conda environment created via mamba from the provided environment.yml
+    and an editable installation of pyfvcom cloned from:
+    https://github.com/pmlmodelling/pyfvcom.git      
+
+    The environment name is 'pyfvcom'. At runtime, the environment is on PATH automatically.
+
+%files
+    environment.yaml /opt/environment.yaml
+
+%environment
+    # Ensure the pyfvcom conda environment is active on PATH at runtime
+    export CONDA_PREFIX="/opt/conda"
+    export ENV_NAME="pyfvcom"
+    export ENV_PATH="$CONDA_PREFIX/envs/$ENV_NAME"
+    if [ -d "$ENV_PATH" ]; then
+        export PATH="$ENV_PATH/bin:$PATH"
+        export CONDA_DEFAULT_ENV="$ENV_NAME"
+    fi
+
+%post
+    # Basic build tools and git
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        git \
+        build-essential \
+        ca-certificates \
+        pkg-config \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Convenience env vars
+    CONDA_PREFIX="/opt/conda"
+    ENV_NAME="pyfvcom"
+    ENV_PATH="$CONDA_PREFIX/envs/$ENV_NAME"
+
+    # Make sure conda is initialized for non-interactive shells
+    . "$CONDA_PREFIX/etc/profile.d/conda.sh"
+
+    # Clone and install pyfvcom
+    mkdir -p /opt/src
+    cd /opt/src
+    git clone -b dev https://github.com/pmlmodelling/pyfvcom.git
+    cd pyfvcom
+    mamba env create -f ./environment.yaml -n "$ENV_NAME"
+
+    # Clean up conda pkgs cache to slim image (optional)
+    conda clean -afy
+
+%runscript
+    # Default run: open python within the pyfvcom environment
+    exec python "$@"
+
+%test
+    # Sanity check: python and pyfvcom importable
+    set -e
+    python -c "import sys; print(sys.version)"
+    python -c "import PyFVCOM; print('pyfvcom version OK')"
