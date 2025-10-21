@@ -57,7 +57,7 @@ for boundary in model.open_boundaries:
 # In[6]:
 
 # Make a vertical grid with 21 uniform levels
-model.sigma.type = 'uniform'
+model.sigma.type = 'UNIFORM'
 model.dims.levels = 21
 
 
